@@ -1,0 +1,122 @@
+[
+	{
+		"file": "D:\\Programming\\UnrealProjects\\backrooms\\Source\\backrooms\\TP_PickUpComponent.cpp",
+		"arguments": [
+			"D:\\Programs\\Visual Studio\\Env\\VC\\Tools\\MSVC\\14.35.32215\\bin\\Hostx64\\x64\\cl.exe",
+			"@D:\\Programming\\UnrealProjects\\backrooms\\.vscode\\compileCommands_Default\\backrooms.1.rsp"
+		],
+		"directory": "D:\\Programs\\UE_5.3\\Engine\\Source"
+	},
+	{
+		"file": "D:\\Programming\\UnrealProjects\\backrooms\\Source\\backrooms\\TP_PickUpComponent.h",
+		"arguments": [
+			"D:\\Programs\\Visual Studio\\Env\\VC\\Tools\\MSVC\\14.35.32215\\bin\\Hostx64\\x64\\cl.exe",
+			"@D:\\Programming\\UnrealProjects\\backrooms\\.vscode\\compileCommands_Default\\backrooms.1.rsp"
+		],
+		"directory": "D:\\Programs\\UE_5.3\\Engine\\Source"
+	},
+	{
+		"file": "D:\\Programming\\UnrealProjects\\backrooms\\Source\\backrooms\\TP_WeaponComponent.cpp",
+		"arguments": [
+			"D:\\Programs\\Visual Studio\\Env\\VC\\Tools\\MSVC\\14.35.32215\\bin\\Hostx64\\x64\\cl.exe",
+			"@D:\\Programming\\UnrealProjects\\backrooms\\.vscode\\compileCommands_Default\\backrooms.1.rsp"
+		],
+		"directory": "D:\\Programs\\UE_5.3\\Engine\\Source"
+	},
+	{
+		"file": "D:\\Programming\\UnrealProjects\\backrooms\\Source\\backrooms\\TP_WeaponComponent.h",
+		"arguments": [
+			"D:\\Programs\\Visual Studio\\Env\\VC\\Tools\\MSVC\\14.35.32215\\bin\\Hostx64\\x64\\cl.exe",
+			"@D:\\Programming\\UnrealProjects\\backrooms\\.vscode\\compileCommands_Default\\backrooms.1.rsp"
+		],
+		"directory": "D:\\Programs\\UE_5.3\\Engine\\Source"
+	},
+	{
+		"file": "D:\\Programming\\UnrealProjects\\backrooms\\Source\\backrooms\\backrooms.Build.cs",
+		"arguments": [
+			"D:\\Programs\\Visual Studio\\Env\\VC\\Tools\\MSVC\\14.35.32215\\bin\\Hostx64\\x64\\cl.exe",
+			"@D:\\Programming\\UnrealProjects\\backrooms\\.vscode\\compileCommands_Default\\backrooms.1.rsp"
+		],
+		"directory": "D:\\Programs\\UE_5.3\\Engine\\Source"
+	},
+	{
+		"file": "D:\\Programming\\UnrealProjects\\backrooms\\Source\\backrooms\\backrooms.cpp",
+		"arguments": [
+			"D:\\Programs\\Visual Studio\\Env\\VC\\Tools\\MSVC\\14.35.32215\\bin\\Hostx64\\x64\\cl.exe",
+			"@D:\\Programming\\UnrealProjects\\backrooms\\.vscode\\compileCommands_Default\\backrooms.1.rsp"
+		],
+		"directory": "D:\\Programs\\UE_5.3\\Engine\\Source"
+	},
+	{
+		"file": "D:\\Programming\\UnrealProjects\\backrooms\\Source\\backrooms\\backrooms.h",
+		"arguments": [
+			"D:\\Programs\\Visual Studio\\Env\\VC\\Tools\\MSVC\\14.35.32215\\bin\\Hostx64\\x64\\cl.exe",
+			"@D:\\Programming\\UnrealProjects\\backrooms\\.vscode\\compileCommands_Default\\backrooms.1.rsp"
+		],
+		"directory": "D:\\Programs\\UE_5.3\\Engine\\Source"
+	},
+	{
+		"file": "D:\\Programming\\UnrealProjects\\backrooms\\Source\\backrooms\\backroomsCharacter.cpp",
+		"arguments": [
+			"D:\\Programs\\Visual Studio\\Env\\VC\\Tools\\MSVC\\14.35.32215\\bin\\Hostx64\\x64\\cl.exe",
+			"@D:\\Programming\\UnrealProjects\\backrooms\\.vscode\\compileCommands_Default\\backrooms.1.rsp"
+		],
+		"directory": "D:\\Programs\\UE_5.3\\Engine\\Source"
+	},
+	{
+		"file": "D:\\Programming\\UnrealProjects\\backrooms\\Source\\backrooms\\backroomsCharacter.h",
+		"arguments": [
+			"D:\\Programs\\Visual Studio\\Env\\VC\\Tools\\MSVC\\14.35.32215\\bin\\Hostx64\\x64\\cl.exe",
+			"@D:\\Programming\\UnrealProjects\\backrooms\\.vscode\\compileCommands_Default\\backrooms.1.rsp"
+		],
+		"directory": "D:\\Programs\\UE_5.3\\Engine\\Source"
+	},
+	{
+		"file": "D:\\Programming\\UnrealProjects\\backrooms\\Source\\backrooms\\backroomsGameMode.cpp",
+		"arguments": [
+			"D:\\Programs\\Visual Studio\\Env\\VC\\Tools\\MSVC\\14.35.32215\\bin\\Hostx64\\x64\\cl.exe",
+			"@D:\\Programming\\UnrealProjects\\backrooms\\.vscode\\compileCommands_Default\\backrooms.1.rsp"
+		],
+		"directory": "D:\\Programs\\UE_5.3\\Engine\\Source"
+	},
+	{
+		"file": "D:\\Programming\\UnrealProjects\\backrooms\\Source\\backrooms\\backroomsGameMode.h",
+		"arguments": [
+			"D:\\Programs\\Visual Studio\\Env\\VC\\Tools\\MSVC\\14.35.32215\\bin\\Hostx64\\x64\\cl.exe",
+			"@D:\\Programming\\UnrealProjects\\backrooms\\.vscode\\compileCommands_Default\\backrooms.1.rsp"
+		],
+		"directory": "D:\\Programs\\UE_5.3\\Engine\\Source"
+	},
+	{
+		"file": "D:\\Programming\\UnrealProjects\\backrooms\\Source\\backrooms\\backroomsPlayerController.cpp",
+		"arguments": [
+			"D:\\Programs\\Visual Studio\\Env\\VC\\Tools\\MSVC\\14.35.32215\\bin\\Hostx64\\x64\\cl.exe",
+			"@D:\\Programming\\UnrealProjects\\backrooms\\.vscode\\compileCommands_Default\\backrooms.1.rsp"
+		],
+		"directory": "D:\\Programs\\UE_5.3\\Engine\\Source"
+	},
+	{
+		"file": "D:\\Programming\\UnrealProjects\\backrooms\\Source\\backrooms\\backroomsPlayerController.h",
+		"arguments": [
+			"D:\\Programs\\Visual Studio\\Env\\VC\\Tools\\MSVC\\14.35.32215\\bin\\Hostx64\\x64\\cl.exe",
+			"@D:\\Programming\\UnrealProjects\\backrooms\\.vscode\\compileCommands_Default\\backrooms.1.rsp"
+		],
+		"directory": "D:\\Programs\\UE_5.3\\Engine\\Source"
+	},
+	{
+		"file": "D:\\Programming\\UnrealProjects\\backrooms\\Source\\backrooms\\backroomsProjectile.cpp",
+		"arguments": [
+			"D:\\Programs\\Visual Studio\\Env\\VC\\Tools\\MSVC\\14.35.32215\\bin\\Hostx64\\x64\\cl.exe",
+			"@D:\\Programming\\UnrealProjects\\backrooms\\.vscode\\compileCommands_Default\\backrooms.1.rsp"
+		],
+		"directory": "D:\\Programs\\UE_5.3\\Engine\\Source"
+	},
+	{
+		"file": "D:\\Programming\\UnrealProjects\\backrooms\\Source\\backrooms\\backroomsProjectile.h",
+		"arguments": [
+			"D:\\Programs\\Visual Studio\\Env\\VC\\Tools\\MSVC\\14.35.32215\\bin\\Hostx64\\x64\\cl.exe",
+			"@D:\\Programming\\UnrealProjects\\backrooms\\.vscode\\compileCommands_Default\\backrooms.1.rsp"
+		],
+		"directory": "D:\\Programs\\UE_5.3\\Engine\\Source"
+	}
+]
