@@ -11,7 +11,17 @@
 	],
 	"settings": {
 		"typescript.tsc.autoDetect": "off",
-		"npm.autoDetect": "off"
+		"npm.autoDetect": "off",
+		"files.associations": {
+			"*.ipp": "cpp",
+			"__locale": "cpp",
+			"optional": "cpp",
+			"regex": "cpp",
+			"algorithm": "cpp",
+			"execution": "cpp",
+			"locale": "cpp",
+			"ranges": "cpp"
+		}
 	},
 	"extensions": {
 		"recommendations": [

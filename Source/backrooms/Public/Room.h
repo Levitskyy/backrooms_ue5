@@ -7,7 +7,7 @@
 #include "Room.generated.h"
 
 UENUM(Meta = (Bitflags, UseEnumValuesAsMaskValuesInEditor = "true"))
-enum class ERoomOpenedSides
+enum class ERoomOpenedSides : int32
 {
 	EROS_Top = 0b0001,
 	EROS_Bottom = 0b0010,
@@ -26,7 +26,7 @@ public:
 	// Sets default values for this actor's properties
 	ARoom();
 
-	UPROPERTY(EditAnywhere, Meta = (Bitmask, BitmaskEnum = "ERoomOpenedSides"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly,Meta = (Bitmask, BitmaskEnum = "ERoomOpenedSides"))
 	int32 OpenedSides;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
