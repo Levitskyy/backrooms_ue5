@@ -12,7 +12,7 @@ AColumnRoom::AColumnRoom()
 void AColumnRoom::SetColumns()
 {
     if (Density < 2 || Density > 25) {
-        Density = 2
+        Density = 2;
     }
     TArray<FTransform> ColumnTransforms;
 

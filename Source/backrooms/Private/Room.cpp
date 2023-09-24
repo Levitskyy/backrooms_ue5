@@ -26,5 +26,14 @@ void ARoom::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	APlayerController* controller = GetWorld()->GetFirstPlayerController();
+	if (!controller) return;
+	if (!controller->GetPawn()) return;
+
+	FVector playerLocation = controller->GetPawn()->GetActorLocation();
+	if (FVector::Distance(playerLocation, GetActorLocation()) > 10000) {
+		Destroy();
+	}
+
 }
 

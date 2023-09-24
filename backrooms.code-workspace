@@ -20,7 +20,8 @@
 			"algorithm": "cpp",
 			"execution": "cpp",
 			"locale": "cpp",
-			"ranges": "cpp"
+			"ranges": "cpp",
+			"__node_handle": "cpp"
 		}
 	},
 	"extensions": {
