@@ -11,6 +11,9 @@ AColumnRoom::AColumnRoom()
 
 void AColumnRoom::SetColumns()
 {
+    if (Density < 2 || Density > 25) {
+        Density = 2
+    }
     TArray<FTransform> ColumnTransforms;
 
     float availableOffsetPerStep = (Size - Offset * 2) / (Density - 1);
@@ -19,7 +22,7 @@ void AColumnRoom::SetColumns()
             FVector translateVector(
                 - Size / 2 + Offset + availableOffsetPerStep * i,
                 - Size / 2 + Offset + availableOffsetPerStep * j,
-                0     
+                ColumnHeight / 2    
             );
             FTransform transform(translateVector);
             ColumnTransforms.Emplace(transform);

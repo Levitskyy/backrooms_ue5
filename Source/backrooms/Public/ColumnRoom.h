@@ -24,6 +24,9 @@ public:
 	float Offset;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float ColumnHeight;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UInstancedStaticMeshComponent* ColumnMesh;
 
 	UFUNCTION(BlueprintCallable, CallInEditor)
