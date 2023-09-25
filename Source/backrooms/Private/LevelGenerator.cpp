@@ -24,11 +24,10 @@ void ALevelGenerator::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	APlayerController* controller = GetWorld()->GetFirstPlayerController();
-	if (!controller) return;
-	if (!controller->GetPawn()) return;
+	APawn* player = GetWorld()->GetFirstPlayerController()->GetPawn();
+	if (!player) return;
 
-	FVector playerLocation = controller->GetPawn()->GetActorLocation();
+	FVector playerLocation = player->GetActorLocation();
 	FVector roomPosition;
 
 	for(int i = -3; i <= 3; ++i) {
@@ -39,7 +38,7 @@ void ALevelGenerator::Tick(float DeltaTime)
 			int32 roomId = GetIdByPosition(curPlayerLocation, roomPosition);
 
 			if (!SpawnedRooms.Contains(roomId)) {
-				SpawnRoom(roomPosition);
+				SpawnRoom(roomPosition, roomId);
 				SpawnedRooms.Add(roomId);
 			}
 		}
@@ -48,10 +47,12 @@ void ALevelGenerator::Tick(float DeltaTime)
 
 }
 
-void ALevelGenerator::SpawnRoom(FVector& position) 
+void ALevelGenerator::SpawnRoom(FVector& position, int32 id) 
 {
 	FTransform transform(position);
-	GetWorld()->SpawnActor(RoomTypes[0], &transform);
+	ARoom* currentRoom = Cast<ARoom>(GetWorld()->SpawnActor(RoomTypes[0], &transform));
+	currentRoom->SetID(id);
+	currentRoom->SetLevelGenerator(this);
 }
 
 int32 ALevelGenerator::GetIdByPosition(FVector& position, FVector& roomPosition) {
@@ -63,6 +64,11 @@ int32 ALevelGenerator::GetIdByPosition(FVector& position, FVector& roomPosition)
 	roomPosition = FVector(xTimes * RoomSize, yTimes * RoomSize, 0);
 
 	return xTimes * LevelSize + yTimes;
+}
+
+void ALevelGenerator::RemoveRoomFromSpawned(int32 id)
+{
+	SpawnedRooms.RemoveSingle(id);
 }
 
 

@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "Room.generated.h"
 
+class ALevelGenerator;
+
 UENUM(Meta = (Bitflags, UseEnumValuesAsMaskValuesInEditor = "true"))
 enum class ERoomOpenedSides : int32
 {
@@ -32,6 +34,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Size;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float ID;
+
+	UPROPERTY()
+	ALevelGenerator* levelGenerator;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -39,5 +47,10 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	int32 GetID();
+	void SetID(int32 id);
+
+	void SetLevelGenerator(ALevelGenerator* generator);
 
 };

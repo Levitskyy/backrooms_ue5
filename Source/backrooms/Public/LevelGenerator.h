@@ -21,11 +21,14 @@ public:
 
 	/** Please add a function description */
 	UFUNCTION(BlueprintCallable, CallInEditor)
-	void SpawnRoom(FVector& position);
+	void SpawnRoom(FVector& position, int32 id);
 
 	/** Please add a function description */
 	UFUNCTION(BlueprintCallable)
 	int32 GetIdByPosition(FVector& position, FVector& roomPosition);
+
+	UFUNCTION(BlueprintCallable)
+	void RemoveRoomFromSpawned(int32 id);
 public:
 
 	/** Please add a variable description */

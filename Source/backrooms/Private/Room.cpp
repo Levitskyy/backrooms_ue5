@@ -2,6 +2,7 @@
 
 
 #include "Room.h"
+#include "LevelGenerator.h"
 using enum ERoomOpenedSides;
 
 // Sets default values
@@ -26,14 +27,31 @@ void ARoom::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	APlayerController* controller = GetWorld()->GetFirstPlayerController();
-	if (!controller) return;
-	if (!controller->GetPawn()) return;
+	APawn* player = GetWorld()->GetFirstPlayerController()->GetPawn();
+	if (!player) return;
 
-	FVector playerLocation = controller->GetPawn()->GetActorLocation();
-	if (FVector::Distance(playerLocation, GetActorLocation()) > 10000) {
+	FVector playerLocation = player->GetActorLocation();
+	if (FVector::Distance(playerLocation, GetActorLocation()) > 10500) {
+		levelGenerator->RemoveRoomFromSpawned(ID);
 		Destroy();
 	}
 
+}
+
+int32 ARoom::GetID()
+{
+	return ID;
+}
+
+void ARoom::SetID(int32 id)
+{
+	ID = id;
+}
+
+void ARoom::SetLevelGenerator(ALevelGenerator* generator)
+{
+	if (generator) {
+		levelGenerator = generator;
+	}
 }
 
