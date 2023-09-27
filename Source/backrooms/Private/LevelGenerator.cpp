@@ -3,6 +3,7 @@
 
 #include "LevelGenerator.h"
 #include "Room.h"
+#include "EngineUtils.h"
 
 // Sets default values
 ALevelGenerator::ALevelGenerator()
@@ -24,25 +25,40 @@ void ALevelGenerator::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	APlayerController* controller = GetWorld()->GetGameInstance()->GetFirstLocalPlayerController();
-	if (!controller) return;
-	
-	APawn* player = controller->GetPawn();
-	if (!player) return;
-		
-	FVector playerLocation = player->GetActorLocation();	
-	FVector roomPosition;
+	TArray<APlayerController*> playerControllerArray;
 
-	for(int i = -3; i <= 3; ++i) {
-		for (int j = -3; j <= 3; ++j) {
-			float curPlayerLocationX = playerLocation.X + RoomSize * i;
-			float curPlayerLocationY = playerLocation.Y + RoomSize * j;
-			FVector curPlayerLocation(curPlayerLocationX, curPlayerLocationY, 0);
-			int32 roomId = GetIdByPosition(curPlayerLocation, roomPosition);
+	if (GetLocalRole() == ROLE_Authority) {
+		for (APlayerController* controller : TActorRange<APlayerController>(GetWorld())) {
+			if (controller) {
+				playerControllerArray.Add(controller);
+			}
+		}
+	}
+	else {
+		APlayerController* controller = GetWorld()->GetGameInstance()->GetFirstLocalPlayerController();
+		if (controller) {
+			playerControllerArray.Add(controller);
+		}
+	}
 
-			if (!SpawnedRooms.Contains(roomId)) {
-				SpawnRoom(roomPosition, roomId);
-				SpawnedRooms.Add(roomId);
+	for(auto& controller : playerControllerArray) {
+		APawn* player = controller->GetPawn();
+		if (!player) continue;
+
+		FVector playerLocation = player->GetActorLocation();	
+		FVector roomPosition;
+
+		for(int i = -3; i <= 3; ++i) {
+			for (int j = -3; j <= 3; ++j) {
+				float curPlayerLocationX = playerLocation.X + RoomSize * i;
+				float curPlayerLocationY = playerLocation.Y + RoomSize * j;
+				FVector curPlayerLocation(curPlayerLocationX, curPlayerLocationY, 0);
+				int32 roomId = GetIdByPosition(curPlayerLocation, roomPosition);
+
+				if (!SpawnedRooms.Contains(roomId)) {
+					SpawnRoom(roomPosition, roomId);
+					SpawnedRooms.Add(roomId);
+				}
 			}
 		}
 	}

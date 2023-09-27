@@ -3,6 +3,7 @@
 
 #include "Room.h"
 #include "LevelGenerator.h"
+#include "EngineUtils.h"
 using enum ERoomOpenedSides;
 
 // Sets default values
@@ -27,16 +28,38 @@ void ARoom::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	APlayerController* controller = GetWorld()->GetGameInstance()->GetFirstLocalPlayerController();
-	if (controller) {
-		APawn* player = controller->GetPawn();
-		if (player) {
-			FVector playerLocation = player->GetActorLocation();
-			if (FVector::Distance(playerLocation, GetActorLocation()) > 10500) {
-				levelGenerator->RemoveRoomFromSpawned(ID);
-				Destroy();
+	TArray<APlayerController*> playerControllerArray;
+
+	if (GetLocalRole() == ROLE_Authority) {
+		for (APlayerController* controller : TActorRange<APlayerController>(GetWorld())) {
+			if (controller) {
+				playerControllerArray.Add(controller);
 			}
 		}
+	}
+	else {
+		APlayerController* controller = GetWorld()->GetGameInstance()->GetFirstLocalPlayerController();
+		if (controller) {
+			playerControllerArray.Add(controller);
+		}
+	}
+
+
+	bool DestroyFlag = true;
+	for(auto& controller : playerControllerArray) {
+		if (controller) {
+			APawn* player = controller->GetPawn();
+			if (player) {
+				FVector playerLocation = player->GetActorLocation();
+				if (FVector::Distance(playerLocation, GetActorLocation()) <= 10500) {
+					DestroyFlag = false;
+				}
+			}
+		}
+	}
+	if (DestroyFlag) {
+		levelGenerator->RemoveRoomFromSpawned(ID);
+		Destroy();
 	}
 }
 
