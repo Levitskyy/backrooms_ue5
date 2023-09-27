@@ -24,10 +24,13 @@ void ALevelGenerator::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	APawn* player = GetWorld()->GetFirstPlayerController()->GetPawn();
+	APlayerController* controller = GetWorld()->GetGameInstance()->GetFirstLocalPlayerController();
+	if (!controller) return;
+	
+	APawn* player = controller->GetPawn();
 	if (!player) return;
-
-	FVector playerLocation = player->GetActorLocation();
+		
+	FVector playerLocation = player->GetActorLocation();	
 	FVector roomPosition;
 
 	for(int i = -3; i <= 3; ++i) {

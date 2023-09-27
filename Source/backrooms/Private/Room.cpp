@@ -27,15 +27,17 @@ void ARoom::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	APawn* player = GetWorld()->GetFirstPlayerController()->GetPawn();
-	if (!player) return;
-
-	FVector playerLocation = player->GetActorLocation();
-	if (FVector::Distance(playerLocation, GetActorLocation()) > 10500) {
-		levelGenerator->RemoveRoomFromSpawned(ID);
-		Destroy();
+	APlayerController* controller = GetWorld()->GetGameInstance()->GetFirstLocalPlayerController();
+	if (controller) {
+		APawn* player = controller->GetPawn();
+		if (player) {
+			FVector playerLocation = player->GetActorLocation();
+			if (FVector::Distance(playerLocation, GetActorLocation()) > 10500) {
+				levelGenerator->RemoveRoomFromSpawned(ID);
+				Destroy();
+			}
+		}
 	}
-
 }
 
 int32 ARoom::GetID()

@@ -33,7 +33,7 @@ public:
 
 	/** Please add a variable description */
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Default")
-	TArray<UClass*> RoomTypes;
+	TArray<TSubclassOf<ARoom>> RoomTypes;
 
 	/** Please add a variable description */
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category="Default")
