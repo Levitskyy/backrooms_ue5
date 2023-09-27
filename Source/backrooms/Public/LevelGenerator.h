@@ -21,30 +21,40 @@ public:
 
 	/** Please add a function description */
 	UFUNCTION(BlueprintCallable, CallInEditor)
-	void SpawnRoom(FVector& position, int32 id);
+	void SpawnRandomRoom(FVector &position, int32 id);
 
 	/** Please add a function description */
 	UFUNCTION(BlueprintCallable)
-	int32 GetIdByPosition(FVector& position, FVector& roomPosition);
+	int32 GetIdByPosition(FVector &position, FVector &roomPosition);
 
 	UFUNCTION(BlueprintCallable)
 	void RemoveRoomFromSpawned(int32 id);
-public:
 
+public:
 	/** Please add a variable description */
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Default")
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Default")
 	TArray<TSubclassOf<ARoom>> RoomTypes;
 
 	/** Please add a variable description */
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category="Default")
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Default")
+	TArray<float> RoomSpawnChances;
+
+	/** Please add a variable description */
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	TArray<float> AccumulatedSpawnChances;
+
+	/** Please add a variable description */
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Default")
 	TArray<int32> SpawnedRooms;
 
 	/** Please add a variable description */
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Default")
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Default")
 	double RoomSize;
 
 	/** Please add a variable description */
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Default")
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Default")
 	int32 LevelSize;
-};
 
+	UPROPERTY(Replicated)
+	int32 LevelSeed;
+};

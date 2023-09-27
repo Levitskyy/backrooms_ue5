@@ -4,6 +4,10 @@
 #include "LevelGenerator.h"
 #include "Room.h"
 #include "EngineUtils.h"
+#include "Math/RandomStream.h"
+#include "Math/UnrealMathUtility.h"
+#include <limits.h>
+#include "Net/UnrealNetwork.h"
 
 // Sets default values
 ALevelGenerator::ALevelGenerator()
@@ -17,6 +21,15 @@ ALevelGenerator::ALevelGenerator()
 void ALevelGenerator::BeginPlay()
 {
 	Super::BeginPlay();
+
+	for (int i = 0; i < RoomSpawnChances.Num(); ++i) {
+		if (i == 0) {
+			AccumulatedSpawnChances.Add(RoomSpawnChances[0]);
+		}
+		else {
+			AccumulatedSpawnChances.Add(AccumulatedSpawnChances[i - 1] + RoomSpawnChances[i]);
+		}
+	}
 	
 }
 
@@ -33,6 +46,7 @@ void ALevelGenerator::Tick(float DeltaTime)
 				playerControllerArray.Add(controller);
 			}
 		}
+		LevelSeed = FMath::RandRange(INT_MIN, INT_MAX);
 	}
 	else {
 		APlayerController* controller = GetWorld()->GetGameInstance()->GetFirstLocalPlayerController();
@@ -56,7 +70,7 @@ void ALevelGenerator::Tick(float DeltaTime)
 				int32 roomId = GetIdByPosition(curPlayerLocation, roomPosition);
 
 				if (!SpawnedRooms.Contains(roomId)) {
-					SpawnRoom(roomPosition, roomId);
+					SpawnRandomRoom(roomPosition, roomId);
 					SpawnedRooms.Add(roomId);
 				}
 			}
@@ -66,10 +80,24 @@ void ALevelGenerator::Tick(float DeltaTime)
 
 }
 
-void ALevelGenerator::SpawnRoom(FVector& position, int32 id) 
+void ALevelGenerator::SpawnRandomRoom(FVector& position, int32 id) 
 {
+	int32 seed = LevelSeed * id * 123984756;
+	FRandomStream randStream(seed);
+	float randFloat = randStream.FRandRange(0, 1);
+	int32 randRoomID = 0;
+
+	UE_LOG(LogTemp,Warning,TEXT("float: %f : id : %d" : seed : %d), randFloat, id, seed);
+
+	for (int i = 0; i < AccumulatedSpawnChances.Num(); ++i) {
+		if (randFloat < AccumulatedSpawnChances[i]) {
+			randRoomID = i;
+			break;
+		}
+	}
+
 	FTransform transform(position);
-	ARoom* currentRoom = Cast<ARoom>(GetWorld()->SpawnActor(RoomTypes[0], &transform));
+	ARoom* currentRoom = Cast<ARoom>(GetWorld()->SpawnActor(RoomTypes[randRoomID], &transform));
 	currentRoom->SetID(id);
 	currentRoom->SetLevelGenerator(this);
 }
@@ -88,6 +116,13 @@ int32 ALevelGenerator::GetIdByPosition(FVector& position, FVector& roomPosition)
 void ALevelGenerator::RemoveRoomFromSpawned(int32 id)
 {
 	SpawnedRooms.RemoveSingle(id);
+}
+
+void ALevelGenerator::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const
+{
+    Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+    DOREPLIFETIME_CONDITION(ALevelGenerator, LevelSeed, COND_InitialOnly);
 }
 
 
