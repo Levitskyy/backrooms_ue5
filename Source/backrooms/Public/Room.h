@@ -37,6 +37,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float ID;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float DestroyDistance;
+
 	UPROPERTY()
 	ALevelGenerator* levelGenerator;
 
@@ -50,6 +53,7 @@ public:
 
 	int32 GetID();
 	void SetID(int32 id);
+	void SetDestroyDistance(float distance);
 
 	void SetLevelGenerator(ALevelGenerator* generator);
 
