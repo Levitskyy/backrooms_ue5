@@ -6,7 +6,6 @@
 #include "EngineUtils.h"
 #include "Math/RandomStream.h"
 #include "Math/UnrealMathUtility.h"
-#include <limits.h>
 #include "Net/UnrealNetwork.h"
 
 // Sets default values
@@ -14,6 +13,7 @@ ALevelGenerator::ALevelGenerator()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	bReplicates = true;
 
 }
 
@@ -21,6 +21,15 @@ ALevelGenerator::ALevelGenerator()
 void ALevelGenerator::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (GetLocalRole() == ROLE_Authority) {
+		FRandomStream randStream(0);
+		randStream.GenerateNewSeed();
+		LevelSeed = randStream.RandHelper(2147400000);
+		UE_LOG(LogTemp,Warning,TEXT("seed : %d"), LevelSeed);
+		LevelSeed = randStream.RandHelper(2147400000);
+		UE_LOG(LogTemp,Warning,TEXT("seed : %d"), LevelSeed);
+	}
 
 	for (int i = 0; i < RoomSpawnChances.Num(); ++i) {
 		if (i == 0) {
@@ -46,7 +55,6 @@ void ALevelGenerator::Tick(float DeltaTime)
 				playerControllerArray.Add(controller);
 			}
 		}
-		LevelSeed = FMath::RandRange(INT_MIN, INT_MAX);
 	}
 	else {
 		APlayerController* controller = GetWorld()->GetGameInstance()->GetFirstLocalPlayerController();
@@ -87,10 +95,10 @@ void ALevelGenerator::SpawnRandomRoom(FVector& position, int32 id)
 	float randFloat = randStream.FRandRange(0, 1);
 	int32 randRoomID = 0;
 
-	UE_LOG(LogTemp,Warning,TEXT("float: %f : id : %d" : seed : %d), randFloat, id, seed);
+	UE_LOG(LogTemp,Warning,TEXT("float: %f : id : %d : seed : %d"), randFloat, id, seed);
 
 	for (int i = 0; i < AccumulatedSpawnChances.Num(); ++i) {
-		if (randFloat < AccumulatedSpawnChances[i]) {
+		if (randFloat <= AccumulatedSpawnChances[i]) {
 			randRoomID = i;
 			break;
 		}
@@ -122,7 +130,7 @@ void ALevelGenerator::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& Ou
 {
     Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-    DOREPLIFETIME_CONDITION(ALevelGenerator, LevelSeed, COND_InitialOnly);
+    DOREPLIFETIME(ALevelGenerator, LevelSeed);
 }
 
 
