@@ -85,3 +85,13 @@ void ARoom::SetLevelGenerator(ALevelGenerator* generator)
 	}
 }
 
+void ARoom::SetSeed(int32 seed)
+{
+	Seed = seed;
+}
+
+int32 ARoom::GetSeed()
+{
+	return Seed;
+}
+

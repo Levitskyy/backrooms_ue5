@@ -3,11 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "IWallGraph.h"
 
 /**
  * 
  */
-class BACKROOMS_API Prim
+class BACKROOMS_API Prim : public IWallGraph
 {
 public:
 	Prim();

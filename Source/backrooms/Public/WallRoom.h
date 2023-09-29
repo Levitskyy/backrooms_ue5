@@ -24,11 +24,28 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float SkipWallSpawnChance;
 
+	/** Adjust walls by height */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float WallHeightAdjustment;
+
 	/** Wall mesh */
 	UPROPERTY()
 	UInstancedStaticMeshComponent* WallStaticMesh;
 
 	UPROPERTY()
 	TArray<TArray<bool>> ClosedWaysGraph;
+
+public:
+
+	AWallRoom();
+
+	UFUNCTION(BlueprintCallable, CallInEditor)
+	void InstantiateWallsByGraph(TArray<TArray<bool>>& wallGraph);
+
+	UFUNCTION()
+	void SetClosedWaysGraph(TArray<TArray<bool>>& wallGraph);
+
+	UFUNCTION()
+	TArray<TArray<bool>>& GetCurrentGraph();
 	
 };
