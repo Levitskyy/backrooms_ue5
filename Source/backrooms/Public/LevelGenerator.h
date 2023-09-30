@@ -30,6 +30,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void RemoveRoomFromSpawned(int32 id);
 
+	UFUNCTION()
+	void OnRep_LevelSeedChange();
+
 public:
 	/** Please add a variable description */
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Default")
@@ -55,6 +58,10 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Default")
 	int32 LevelSize;
 
-	UPROPERTY(Replicated)
+	/** Please add a variable description */
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Default")
+	int32 OneWayChunkSize;
+
+	UPROPERTY(Replicated, ReplicatedUsing=OnRep_LevelSeedChange)
 	int32 LevelSeed;
 };

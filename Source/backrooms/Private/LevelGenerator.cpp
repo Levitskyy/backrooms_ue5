@@ -26,9 +26,6 @@ void ALevelGenerator::BeginPlay()
 		FRandomStream randStream(0);
 		randStream.GenerateNewSeed();
 		LevelSeed = randStream.RandHelper(2147400000);
-		UE_LOG(LogTemp,Warning,TEXT("seed : %d"), LevelSeed);
-		LevelSeed = randStream.RandHelper(2147400000);
-		UE_LOG(LogTemp,Warning,TEXT("seed : %d"), LevelSeed);
 	}
 
 	for (int i = 0; i < RoomSpawnChances.Num(); ++i) {
@@ -70,8 +67,8 @@ void ALevelGenerator::Tick(float DeltaTime)
 		FVector playerLocation = player->GetActorLocation();	
 		FVector roomPosition;
 
-		for(int i = -3; i <= 3; ++i) {
-			for (int j = -3; j <= 3; ++j) {
+		for(int i = -OneWayChunkSize; i <= OneWayChunkSize; ++i) {
+			for (int j = -OneWayChunkSize; j <= OneWayChunkSize; ++j) {
 				float curPlayerLocationX = playerLocation.X + RoomSize * i;
 				float curPlayerLocationY = playerLocation.Y + RoomSize * j;
 				FVector curPlayerLocation(curPlayerLocationX, curPlayerLocationY, 0);
@@ -108,6 +105,7 @@ void ALevelGenerator::SpawnRandomRoom(FVector& position, int32 id)
 	ARoom* currentRoom = Cast<ARoom>(GetWorld()->SpawnActor(RoomTypes[randRoomID], &transform));
 	currentRoom->SetID(id);
 	currentRoom->SetLevelGenerator(this);
+	currentRoom->SetDestroyDistance((OneWayChunkSize + 1) * RoomSize);
 }
 
 int32 ALevelGenerator::GetIdByPosition(FVector& position, FVector& roomPosition) {
@@ -131,6 +129,13 @@ void ALevelGenerator::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& Ou
     Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
     DOREPLIFETIME(ALevelGenerator, LevelSeed);
+}
+
+void ALevelGenerator::OnRep_LevelSeedChange() {
+	for (ARoom* room : TActorRange<ARoom>(GetWorld())) {
+			room->Destroy();
+			SpawnedRooms.Empty(OneWayChunkSize * OneWayChunkSize);
+		}
 }
 
 
