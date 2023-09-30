@@ -51,7 +51,7 @@ void ARoom::Tick(float DeltaTime)
 			APawn* player = controller->GetPawn();
 			if (player) {
 				FVector playerLocation = player->GetActorLocation();
-				if (FVector::Distance(playerLocation, GetActorLocation()) <= DestroyDistance) {
+				if (FVector::Distance(playerLocation, GetActorLocation()) <= 10500) {
 					DestroyFlag = false;
 				}
 			}
@@ -71,11 +71,6 @@ int32 ARoom::GetID()
 void ARoom::SetID(int32 id)
 {
 	ID = id;
-}
-
-void ARoom::SetDestroyDistance(float distance)
-{
-	DestroyDistance = distance;
 }
 
 void ARoom::SetLevelGenerator(ALevelGenerator* generator)
