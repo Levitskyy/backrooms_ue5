@@ -101,7 +101,10 @@ void ALevelGenerator::SpawnRandomRoom(FVector& position, int32 id)
 		}
 	}
 
-	FTransform transform(position);
+	FRotator rotation(0, 90 * randStream.RandHelper(4), 0);
+	FVector scale(1, 1, 1);
+
+	FTransform transform(rotation, position, scale);
 	ARoom* currentRoom = Cast<ARoom>(GetWorld()->SpawnActor(RoomTypes[randRoomID], &transform));
 	currentRoom->SetID(id);
 	currentRoom->SetLevelGenerator(this);
