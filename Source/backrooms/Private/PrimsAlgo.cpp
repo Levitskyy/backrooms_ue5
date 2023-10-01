@@ -24,13 +24,12 @@ PrimsAlgorithm::PrimsAlgorithm(int roomsNumber, int seed)
 }
 
 TArray<bool>& PrimsAlgorithm::GetGeneratedGraph() {
-    int len = sqrLen * sqrLen;
     std::vector<int> curParent;
-    returnGraph.Init(false, len);
+    returnGraph.Init(false, sqrLen * sqrLen);
     HandleGraph(returnGraph);
     curParent = PrimsMST();
 
-    for (int i = 1; i < sqrLen; i++) {
+    for (int i = 1; i < sqrLen; ++i) {
         returnGraph[i * sqrLen + curParent[i]] = false;
         returnGraph[curParent[i] * sqrLen + i] = false;
     }
@@ -46,7 +45,7 @@ std::vector<int> PrimsAlgorithm::PrimsMST() {
     key[0] = 0;
     parent[0] = -1;
 
-    for (int count = 0; count < sqrLen; ++count) {
+    for (int count = 0; count < sqrLen - 1; ++count) {
         int u = MinKey(key, mstSet);
         mstSet[u] = true; 
 
@@ -65,7 +64,6 @@ std::vector<int> PrimsAlgorithm::PrimsMST() {
 }
 
 void PrimsAlgorithm::HandleGraph(TArray<bool>& curGraph) {
-    int len = sqrLen * sqrLen;
     int dif = 0;
 
     for (int i = 0; i < sqrLen; ++i) {
@@ -74,8 +72,8 @@ void PrimsAlgorithm::HandleGraph(TArray<bool>& curGraph) {
             
             dif = abs(j - i);
             if (dif != 1 &&
-                dif != sqrLen ||
-                (dif == 1 && i % sqrLen == 0)) {
+                dif != roomLength ||
+                (dif == 1 && i % roomLength == 0)) {
                     curGraph[i * sqrLen + j] = false;
                     curGraph[j * sqrLen + i] = false;
                     continue;
