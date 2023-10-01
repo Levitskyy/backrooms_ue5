@@ -59,6 +59,7 @@ public:
 	void SetDestroyDistance(float distance);
 	int32 GetSeed();
 	void SetSeed(int32 seed);
+	virtual void Init(int32 id, int32 seed, float distance, ALevelGenerator* generator);
 
 	void SetLevelGenerator(ALevelGenerator* generator);
 

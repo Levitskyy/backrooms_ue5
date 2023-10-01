@@ -3,6 +3,7 @@
 
 #include "WallRoom.h"
 #include "IWallGraph.h"
+#include "PrimsAlgorithm.h"
 #include "Components/InstancedStaticMeshComponent.h"
 #include <cmath>
 
@@ -11,47 +12,58 @@ AWallRoom::AWallRoom()
     WallStaticMesh = CreateDefaultSubobject<UInstancedStaticMeshComponent>(TEXT("Walls"));
 }
 
-void AWallRoom::InstantiateWallsByGraph(TArray<TArray<bool>> &wallGraph)
+void AWallRoom::InstantiateWallsByGraph()
 {
     check(GridSize >= 2);
+    TArray<bool> &wallGraph = ClosedWaysGraph;
     TArray<FTransform> WallTransforms;
     int firstIdxs[2];
     int secondIdxs[2];
+    FRandomStream randStream(Seed);
 
-    for (int i = 0; i < GridSize * GridSize; ++i) {
+    for (int k = 0; k < GridSize * GridSize * GridSize * GridSize; ++k) {
+        int i = k / (GridSize * GridSize);
+        int j = k % (GridSize * GridSize);
+
+        if (j >= i || !wallGraph[k]) continue;
+        if (randStream.GetFraction() < SkipWallSpawnChance) continue;
+
         firstIdxs[0] = i / GridSize;
         firstIdxs[1] = i % GridSize;
+        secondIdxs[0] = j / GridSize;
+        secondIdxs[1] = j % GridSize;
 
-        for (int j = 0; j < i; ++j) {
-            if (!wallGraph[i][j]) continue;
+        float zRotation = abs(i - j) == 1 ? 0 : 90;
 
-            secondIdxs[0] = j / GridSize;
-            secondIdxs[1] = j % GridSize;
-
-            float zRotation = abs(i - j) == 1 ? 0 : 90;
-
-            FVector translateVector(
-                (-Size / 2) + (((float)GridSize / 2 - (firstIdxs[0] + 1) * GridSize) + ((float)GridSize / 2 - (secondIdxs[0] + 1) * GridSize)) / 2,
-                (-Size / 2) + (((float)GridSize / 2 - (firstIdxs[1] + 1) * GridSize) + ((float)GridSize / 2 - (secondIdxs[1] + 1) * GridSize)) / 2,
-                WallHeightAdjustment / 2    
-            );
-            FRotator rotation(0, 0, zRotation);
-            FVector scale(1, 1, 1);
-            FTransform transform(translateVector, rotation, scale);
-            WallTransforms.Emplace(transform);
-        }
+        FVector translateVector(
+            (-Size / 2) + (((float)GridSize / 2 - (firstIdxs[0] + 1) * GridSize) + ((float)GridSize / 2 - (secondIdxs[0] + 1) * GridSize)) / 2,
+            (-Size / 2) + (((float)GridSize / 2 - (firstIdxs[1] + 1) * GridSize) + ((float)GridSize / 2 - (secondIdxs[1] + 1) * GridSize)) / 2,
+            WallHeightAdjustment / 2    
+        );
+        FRotator rotation(0, zRotation, 0);
+        FVector scale(1, 1, 1);
+        FTransform transform(rotation, translateVector, scale);
+        WallTransforms.Emplace(transform);
     }
+    
 
     WallStaticMesh->AddInstances(WallTransforms, false, false);
 }
 
-void AWallRoom::SetClosedWaysGraph(IWallRoom &generator)
+void AWallRoom::SetClosedWaysGraph(IWallGraph &generator)
 {
     ClosedWaysGraph = generator.GetGeneratedGraph();
 }
 
-TArray<TArray<bool>>& AWallRoom::GetCurrentGraph()
+TArray<bool>& AWallRoom::GetCurrentGraph()
 {
     return ClosedWaysGraph;
+}
+
+void AWallRoom::Init(int32 id, int32 seed, float distance, ALevelGenerator* generator)
+{
+    ARoom::Init(id, seed, distance, generator);
+    PrimsAlgorithm prim(GridSize, Seed);
+    SetClosedWaysGraph(prim);
 }
 

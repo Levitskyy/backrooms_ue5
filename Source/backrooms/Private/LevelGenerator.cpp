@@ -7,6 +7,7 @@
 #include "Math/RandomStream.h"
 #include "Math/UnrealMathUtility.h"
 #include "Net/UnrealNetwork.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ALevelGenerator::ALevelGenerator()
@@ -102,10 +103,12 @@ void ALevelGenerator::SpawnRandomRoom(FVector& position, int32 id)
 	}
 
 	FTransform transform(position);
-	ARoom* currentRoom = Cast<ARoom>(GetWorld()->SpawnActor(RoomTypes[randRoomID], &transform));
-	currentRoom->SetID(id);
-	currentRoom->SetLevelGenerator(this);
-	currentRoom->SetDestroyDistance((OneWayChunkSize + 1) * RoomSize);
+	ARoom* currentRoom = GetWorld()->SpawnActorDeferred<ARoom>(RoomTypes[randRoomID], transform);
+	
+	if (currentRoom) {
+		currentRoom->Init(id, seed, (OneWayChunkSize + 1) * RoomSize, this);
+		UGameplayStatics::FinishSpawningActor(currentRoom, currentRoom->GetTransform());
+	}
 }
 
 int32 ALevelGenerator::GetIdByPosition(FVector& position, FVector& roomPosition) {

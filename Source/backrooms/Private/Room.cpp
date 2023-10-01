@@ -95,3 +95,11 @@ int32 ARoom::GetSeed()
 	return Seed;
 }
 
+void ARoom::Init(int32 id, int32 seed, float distance, ALevelGenerator* generator)
+{
+	SetSeed(seed);
+	SetID(id);
+	SetDestroyDistance(distance);
+	SetLevelGenerator(generator);
+}
+

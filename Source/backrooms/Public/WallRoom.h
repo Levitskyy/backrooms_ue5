@@ -6,6 +6,8 @@
 #include "Room.h"
 #include "WallRoom.generated.h"
 
+class IWallGraph;
+
 /**
  * 
  */
@@ -29,23 +31,24 @@ public:
 	float WallHeightAdjustment;
 
 	/** Wall mesh */
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UInstancedStaticMeshComponent* WallStaticMesh;
 
 	UPROPERTY()
-	TArray<TArray<bool>> ClosedWaysGraph;
+	TArray<bool> ClosedWaysGraph;
 
 public:
 
 	AWallRoom();
 
 	UFUNCTION(BlueprintCallable, CallInEditor)
-	void InstantiateWallsByGraph(TArray<TArray<bool>>& wallGraph);
+	void InstantiateWallsByGraph();
+
+	void SetClosedWaysGraph(IWallGraph& generator);
 
 	UFUNCTION()
-	void SetClosedWaysGraph(TArray<TArray<bool>>& wallGraph);
+	TArray<bool>& GetCurrentGraph();
 
-	UFUNCTION()
-	TArray<TArray<bool>>& GetCurrentGraph();
-	
+	virtual void Init(int32 id, int32 seed, float distance, ALevelGenerator* generator) override;
+
 };
