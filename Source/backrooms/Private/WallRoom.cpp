@@ -36,8 +36,8 @@ void AWallRoom::InstantiateWallsByGraph()
         float zRotation = abs(i - j) == 1 ? 0 : 90;
 
         FVector translateVector(
-            (-Size / 2) + (((float)GridSize / 2 - (firstIdxs[0] + 1) * GridSize) + ((float)GridSize / 2 - (secondIdxs[0] + 1) * GridSize)) / 2,
-            (-Size / 2) + (((float)GridSize / 2 - (firstIdxs[1] + 1) * GridSize) + ((float)GridSize / 2 - (secondIdxs[1] + 1) * GridSize)) / 2,
+            (-Size / 2) + ((firstIdxs[0] + secondIdxs[0]) / 2) * (Size / GridSize),
+            (-Size / 2) + ((firstIdxs[1] + secondIdxs[1]) / 2) * (Size / GridSize),
             WallHeightAdjustment / 2    
         );
         FRotator rotation(0, zRotation, 0);

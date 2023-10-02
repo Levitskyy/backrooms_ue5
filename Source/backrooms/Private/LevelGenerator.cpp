@@ -106,8 +106,8 @@ void ALevelGenerator::SpawnRandomRoom(FVector& position, int32 id)
 	ARoom* currentRoom = GetWorld()->SpawnActorDeferred<ARoom>(RoomTypes[randRoomID], transform);
 	
 	if (currentRoom) {
-		currentRoom->Init(id, seed, (OneWayChunkSize + 1) * RoomSize, this);
-		UGameplayStatics::FinishSpawningActor(currentRoom, currentRoom->GetTransform());
+		currentRoom->Init(id, seed, (OneWayChunkSize + 2) * RoomSize, this);
+		UGameplayStatics::FinishSpawningActor(currentRoom, transform);
 	}
 }
 
