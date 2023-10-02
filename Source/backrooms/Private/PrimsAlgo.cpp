@@ -121,7 +121,7 @@ void PrimsAlgorithm::GetRandomGraph()
                 (dif == 1 && (i % roomLength == 0)))
                 continue;
 
-            if (graph[i][j] != 0)
+            if (graph[j][i] != 0)
                 graph[i][j] = graph[j][i];
             else {
                 graph[i][j] = randStream.RandHelper(100) + 1;
