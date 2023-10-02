@@ -33,7 +33,7 @@ void AWallRoom::InstantiateWallsByGraph()
         secondIdxs[0] = j / GridSize;
         secondIdxs[1] = j % GridSize;
 
-        float zRotation = abs(i - j) == 1 ? 0 : 90;
+        float zRotation = abs(i - j) == 1 ? 90 : 0;
 
         FVector translateVector(
             (-Size / 2) + ((firstIdxs[0] + secondIdxs[0]) / 2) * (Size / GridSize),
