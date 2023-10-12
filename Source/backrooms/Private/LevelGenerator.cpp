@@ -137,8 +137,8 @@ void ALevelGenerator::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& Ou
 void ALevelGenerator::OnRep_LevelSeedChange() {
 	for (ARoom* room : TActorRange<ARoom>(GetWorld())) {
 			room->Destroy();
-			SpawnedRooms.Empty(OneWayChunkSize * OneWayChunkSize);
 		}
+	SpawnedRooms.Empty((OneWayChunkSize + 1) * (OneWayChunkSize + 1));
 }
 
 

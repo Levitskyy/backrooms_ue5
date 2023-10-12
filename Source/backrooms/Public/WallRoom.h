@@ -30,6 +30,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float WallHeightAdjustment;
 
+	/** Adjust walls by rotation */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool WallRotationAdjustment;
+
 	/** Wall mesh */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UInstancedStaticMeshComponent* WallStaticMesh;

@@ -33,12 +33,27 @@ void AWallRoom::InstantiateWallsByGraph()
         secondIdxs[0] = j / GridSize;
         secondIdxs[1] = j % GridSize;
 
-        float zRotation = abs(i - j) == 1 ? 90 : 0;
+        bool Rotate = abs(i - j) != 1;
+        Rotate = WallRotationAdjustment ? !Rotate : Rotate;
+        float zRotation = Rotate ? 90 : 0;
+
+        float WallSize = Size / GridSize;
+        FVector firstRoomCenter(
+            firstIdxs[0] * WallSize + 0.5 * WallSize,
+            firstIdxs[1] * WallSize + 0.5 * WallSize,
+            WallHeightAdjustment / 2
+        );
+
+        FVector secondRoomCenter(
+            secondIdxs[0] * WallSize + 0.5 * WallSize,
+            secondIdxs[1] * WallSize + 0.5 * WallSize,
+            WallHeightAdjustment / 2
+        );
 
         FVector translateVector(
-            (-Size / 2) + ((firstIdxs[0] + secondIdxs[0]) / 2) * (Size / GridSize),
-            (-Size / 2) + ((firstIdxs[1] + secondIdxs[1]) / 2) * (Size / GridSize),
-            WallHeightAdjustment / 2    
+            (-Size / 2) + (firstRoomCenter.X + secondRoomCenter.X) / 2,   
+            (-Size / 2) + (firstRoomCenter.Y + secondRoomCenter.Y) / 2,
+            (firstRoomCenter.Z + secondRoomCenter.Z) / 2
         );
         FRotator rotation(0, zRotation, 0);
         FVector scale(1, 1, 1);
