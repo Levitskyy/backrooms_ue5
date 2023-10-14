@@ -51,8 +51,8 @@ void AWallRoom::InstantiateWallsByGraph()
         );
 
         FVector translateVector(
-            (-Size / 2) + (firstRoomCenter.X + secondRoomCenter.X) / 2,   
-            (-Size / 2) + (firstRoomCenter.Y + secondRoomCenter.Y) / 2,
+            WallsOffset + (firstRoomCenter.X + secondRoomCenter.X) / 2,   
+            WallsOffset + (firstRoomCenter.Y + secondRoomCenter.Y) / 2,
             (firstRoomCenter.Z + secondRoomCenter.Z) / 2
         );
         FRotator rotation(0, zRotation, 0);

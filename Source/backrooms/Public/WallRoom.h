@@ -30,6 +30,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float WallHeightAdjustment;
 
+	/** Walls offset */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float WallsOffset;
+
 	/** Adjust walls by rotation */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool WallRotationAdjustment;
