@@ -7,6 +7,7 @@
 #include "Math/RandomStream.h"
 #include "Math/UnrealMathUtility.h"
 #include "Net/UnrealNetwork.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ALevelGenerator::ALevelGenerator()
@@ -105,10 +106,12 @@ void ALevelGenerator::SpawnRandomRoom(FVector& position, int32 id)
 	FVector scale(1, 1, 1);
 
 	FTransform transform(rotation, position, scale);
-	ARoom* currentRoom = Cast<ARoom>(GetWorld()->SpawnActor(RoomTypes[randRoomID], &transform));
-	currentRoom->SetID(id);
-	currentRoom->SetLevelGenerator(this);
-	currentRoom->SetDestroyDistance((OneWayChunkSize + 1) * RoomSize);
+	ARoom* currentRoom = GetWorld()->SpawnActorDeferred<ARoom>(RoomTypes[randRoomID], transform);
+	
+	if (currentRoom) {
+		currentRoom->Init(id, seed, (OneWayChunkSize + 2) * RoomSize, this);
+		UGameplayStatics::FinishSpawningActor(currentRoom, transform);
+	}
 }
 
 int32 ALevelGenerator::GetIdByPosition(FVector& position, FVector& roomPosition) {
@@ -137,8 +140,8 @@ void ALevelGenerator::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& Ou
 void ALevelGenerator::OnRep_LevelSeedChange() {
 	for (ARoom* room : TActorRange<ARoom>(GetWorld())) {
 			room->Destroy();
-			SpawnedRooms.Empty(OneWayChunkSize * OneWayChunkSize);
 		}
+	SpawnedRooms.Empty((OneWayChunkSize + 1) * (OneWayChunkSize + 1));
 }
 
 
