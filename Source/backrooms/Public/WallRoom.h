@@ -42,8 +42,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UInstancedStaticMeshComponent* WallStaticMesh;
 
-	UPROPERTY()
-	TArray<bool> ClosedWaysGraph;
 
 public:
 
@@ -52,11 +50,5 @@ public:
 	UFUNCTION(BlueprintCallable, CallInEditor)
 	void InstantiateWallsByGraph();
 
-	void SetClosedWaysGraph(IWallGraph& generator);
-
-	UFUNCTION()
-	TArray<bool>& GetCurrentGraph();
-
-	virtual void Init(int32 id, int32 seed, float distance, ALevelGenerator* generator) override;
-
+	virtual void OnRep_Seed() override;
 };

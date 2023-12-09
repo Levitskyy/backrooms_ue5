@@ -4,6 +4,7 @@
 #include "Room.h"
 #include "LevelGenerator.h"
 #include "EngineUtils.h"
+#include "Net/UnrealNetwork.h"
 using enum ERoomOpenedSides;
 
 // Sets default values
@@ -11,6 +12,7 @@ ARoom::ARoom()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	bReplicates = true;
 
 	OpenedSides = (int32)(EROS_Top | EROS_Bottom | EROS_Left | EROS_Right);
 	Size = 2000;
@@ -28,40 +30,35 @@ void ARoom::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	TArray<APlayerController*> playerControllerArray;
-
 	if (GetLocalRole() == ROLE_Authority) {
+		TArray<APlayerController*> playerControllerArray;
 		for (APlayerController* controller : TActorRange<APlayerController>(GetWorld())) {
 			if (controller) {
 				playerControllerArray.Add(controller);
 			}
 		}
-	}
-	else {
-		APlayerController* controller = GetWorld()->GetGameInstance()->GetFirstLocalPlayerController();
-		if (controller) {
-			playerControllerArray.Add(controller);
-		}
-	}
+	
 
-
-	bool DestroyFlag = true;
-	for(auto& controller : playerControllerArray) {
-		if (controller) {
-			APawn* player = controller->GetPawn();
-			if (player) {
-				FVector playerLocation = player->GetActorLocation();
-				if (FVector::Distance(playerLocation, GetActorLocation()) <= DestroyDistance) {
-					DestroyFlag = false;
+		bool DestroyFlag = true;
+		for(auto& controller : playerControllerArray) {
+			if (controller) {
+				APawn* player = controller->GetPawn();
+				if (player) {
+					FVector playerLocation = player->GetActorLocation();
+					if (FVector::Distance(playerLocation, GetActorLocation()) <= DestroyDistance) {
+						DestroyFlag = false;
+					}
 				}
 			}
 		}
-	}
-	if (DestroyFlag) {
-		levelGenerator->RemoveRoomFromSpawned(ID);
-		Destroy();
+		if (DestroyFlag) {
+			levelGenerator->RemoveRoomFromSpawned(ID);
+			Destroy();
+		}
 	}
 }
+
+
 
 int32 ARoom::GetID()
 {
@@ -95,11 +92,22 @@ int32 ARoom::GetSeed()
 	return Seed;
 }
 
-void ARoom::Init(int32 id, int32 seed, float distance, ALevelGenerator* generator)
+void ARoom::Init(int32 a_id, int32 a_seed, float distance, ALevelGenerator* generator)
 {
-	SetSeed(seed);
-	SetID(id);
+	SetSeed(a_seed);
+	SetID(a_id);
 	SetDestroyDistance(distance);
 	SetLevelGenerator(generator);
+}
+
+void ARoom::GetLifetimeReplicatedProps( TArray< FLifetimeProperty > & OutLifetimeProps ) const
+{
+	Super::GetLifetimeReplicatedProps( OutLifetimeProps );
+    DOREPLIFETIME( ARoom, Seed );
+}
+
+void ARoom::OnRep_Seed()
+{
+
 }
 

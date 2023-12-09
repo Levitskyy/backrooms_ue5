@@ -27,14 +27,15 @@ void ALevelGenerator::BeginPlay()
 		FRandomStream randStream(0);
 		randStream.GenerateNewSeed();
 		LevelSeed = randStream.RandHelper(2147400000);
-	}
 
-	for (int i = 0; i < RoomSpawnChances.Num(); ++i) {
-		if (i == 0) {
-			AccumulatedSpawnChances.Add(RoomSpawnChances[0]);
-		}
-		else {
-			AccumulatedSpawnChances.Add(AccumulatedSpawnChances[i - 1] + RoomSpawnChances[i]);
+
+		for (int i = 0; i < RoomSpawnChances.Num(); ++i) {
+			if (i == 0) {
+				AccumulatedSpawnChances.Add(RoomSpawnChances[0]);
+			}
+			else {
+				AccumulatedSpawnChances.Add(AccumulatedSpawnChances[i - 1] + RoomSpawnChances[i]);
+			}
 		}
 	}
 	
@@ -44,31 +45,24 @@ void ALevelGenerator::BeginPlay()
 void ALevelGenerator::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	TArray<APlayerController*> playerControllerArray;
-
 	if (GetLocalRole() == ROLE_Authority) {
+		TArray<APlayerController*> playerControllerArray;
 		for (APlayerController* controller : TActorRange<APlayerController>(GetWorld())) {
-			if (controller) {
-				playerControllerArray.Add(controller);
-			}
-		}
+				if (controller) {
+					SpawnRoomsAroundPlayer(controller);
+				}
+			}	
 	}
-	else {
-		APlayerController* controller = GetWorld()->GetGameInstance()->GetFirstLocalPlayerController();
-		if (controller) {
-			playerControllerArray.Add(controller);
-		}
-	}
+}
 
-	for(auto& controller : playerControllerArray) {
-		APawn* player = controller->GetPawn();
-		if (!player) continue;
-
-		FVector playerLocation = player->GetActorLocation();	
+void ALevelGenerator::SpawnRoomsAroundPlayer(const APlayerController* controller)
+{
+	APawn* player = controller->GetPawn();
+	if (player) {
+		FVector playerLocation = player->GetActorLocation();
 		FVector roomPosition;
 
-		for(int i = -OneWayChunkSize; i <= OneWayChunkSize; ++i) {
+		for (int i = -OneWayChunkSize; i <= OneWayChunkSize; ++i) {
 			for (int j = -OneWayChunkSize; j <= OneWayChunkSize; ++j) {
 				float curPlayerLocationX = playerLocation.X + RoomSize * i;
 				float curPlayerLocationY = playerLocation.Y + RoomSize * j;
@@ -76,24 +70,22 @@ void ALevelGenerator::Tick(float DeltaTime)
 				int32 roomId = GetIdByPosition(curPlayerLocation, roomPosition);
 
 				if (!SpawnedRooms.Contains(roomId)) {
-					SpawnRandomRoom(roomPosition, roomId);
+					PrepareSpawnRandomRoom(roomPosition, roomId);
 					SpawnedRooms.Add(roomId);
 				}
 			}
 		}
 	}
-
-
 }
 
-void ALevelGenerator::SpawnRandomRoom(FVector& position, int32 id) 
+
+void ALevelGenerator::PrepareSpawnRandomRoom(FVector& position, int32 id) 
 {
 	int32 seed = LevelSeed * id * 123984756;
 	FRandomStream randStream(seed);
 	float randFloat = randStream.FRandRange(0, 1);
 	int32 randRoomID = 0;
 
-	UE_LOG(LogTemp,Warning,TEXT("float: %f : id : %d : seed : %d"), randFloat, id, seed);
 
 	for (int i = 0; i < AccumulatedSpawnChances.Num(); ++i) {
 		if (randFloat <= AccumulatedSpawnChances[i]) {
@@ -106,6 +98,11 @@ void ALevelGenerator::SpawnRandomRoom(FVector& position, int32 id)
 	FVector scale(1, 1, 1);
 
 	FTransform transform(rotation, position, scale);
+	SpawnRandomRoom(transform, randRoomID, id, seed);
+}
+
+void ALevelGenerator::SpawnRandomRoom(const FTransform& transform, int32 randRoomID, int32 id, int32 seed)
+{
 	ARoom* currentRoom = GetWorld()->SpawnActorDeferred<ARoom>(RoomTypes[randRoomID], transform);
 	
 	if (currentRoom) {
@@ -128,20 +125,6 @@ int32 ALevelGenerator::GetIdByPosition(FVector& position, FVector& roomPosition)
 void ALevelGenerator::RemoveRoomFromSpawned(int32 id)
 {
 	SpawnedRooms.RemoveSingle(id);
-}
-
-void ALevelGenerator::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const
-{
-    Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-    DOREPLIFETIME(ALevelGenerator, LevelSeed);
-}
-
-void ALevelGenerator::OnRep_LevelSeedChange() {
-	for (ARoom* room : TActorRange<ARoom>(GetWorld())) {
-			room->Destroy();
-		}
-	SpawnedRooms.Empty((OneWayChunkSize + 1) * (OneWayChunkSize + 1));
 }
 
 

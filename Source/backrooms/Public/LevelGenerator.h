@@ -20,10 +20,6 @@ public:
 	void Tick(float DeltaTime);
 
 	/** Please add a function description */
-	UFUNCTION(BlueprintCallable, CallInEditor)
-	void SpawnRandomRoom(FVector &position, int32 id);
-
-	/** Please add a function description */
 	UFUNCTION(BlueprintCallable)
 	int32 GetIdByPosition(FVector &position, FVector &roomPosition);
 
@@ -31,9 +27,16 @@ public:
 	void RemoveRoomFromSpawned(int32 id);
 
 	UFUNCTION()
-	void OnRep_LevelSeedChange();
+	void SpawnRoomsAroundPlayer(const APlayerController* controller);
+
+	UFUNCTION(BlueprintCallable, CallInEditor)
+	void PrepareSpawnRandomRoom(FVector& position, int32 id);
+
+	UFUNCTION()
+	void SpawnRandomRoom(const FTransform& transform, int32 randRoomID, int32 id, int32 seed);
 
 public:
+
 	/** Please add a variable description */
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Default")
 	TArray<TSubclassOf<ARoom>> RoomTypes;
@@ -62,6 +65,6 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Default")
 	int32 OneWayChunkSize;
 
-	UPROPERTY(Replicated, ReplicatedUsing=OnRep_LevelSeedChange)
+	UPROPERTY()
 	int32 LevelSeed;
 };

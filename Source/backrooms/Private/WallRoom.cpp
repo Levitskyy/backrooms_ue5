@@ -6,6 +6,8 @@
 #include "PrimsAlgorithm.h"
 #include "Components/InstancedStaticMeshComponent.h"
 #include <cmath>
+#include "Engine.h"
+#include "Net/UnrealNetwork.h"
 
 AWallRoom::AWallRoom()
 {
@@ -15,7 +17,9 @@ AWallRoom::AWallRoom()
 void AWallRoom::InstantiateWallsByGraph()
 {
     check(GridSize >= 2);
-    TArray<bool> &wallGraph = ClosedWaysGraph;
+    WallStaticMesh->ClearInstances();
+    PrimsAlgorithm prim(GridSize, Seed);
+    TArray<bool>& wallGraph = prim.GetGeneratedGraph();
     TArray<FTransform> WallTransforms;
     int firstIdxs[2];
     int secondIdxs[2];
@@ -51,7 +55,7 @@ void AWallRoom::InstantiateWallsByGraph()
         );
 
         FVector translateVector(
-            WallsOffset + (firstRoomCenter.X + secondRoomCenter.X) / 2,   
+            WallsOffset + (firstRoomCenter.X + secondRoomCenter.X) / 2,
             WallsOffset + (firstRoomCenter.Y + secondRoomCenter.Y) / 2,
             (firstRoomCenter.Z + secondRoomCenter.Z) / 2
         );
@@ -60,25 +64,13 @@ void AWallRoom::InstantiateWallsByGraph()
         FTransform transform(rotation, translateVector, scale);
         WallTransforms.Emplace(transform);
     }
-    
+
 
     WallStaticMesh->AddInstances(WallTransforms, false, false);
 }
 
-void AWallRoom::SetClosedWaysGraph(IWallGraph &generator)
+void AWallRoom::OnRep_Seed()
 {
-    ClosedWaysGraph = generator.GetGeneratedGraph();
-}
-
-TArray<bool>& AWallRoom::GetCurrentGraph()
-{
-    return ClosedWaysGraph;
-}
-
-void AWallRoom::Init(int32 id, int32 seed, float distance, ALevelGenerator* generator)
-{
-    ARoom::Init(id, seed, distance, generator);
-    PrimsAlgorithm prim(GridSize, Seed);
-    SetClosedWaysGraph(prim);
+    InstantiateWallsByGraph();
 }
 
