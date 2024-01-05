@@ -43,6 +43,10 @@ public:
 
 	/** Please add a variable description */
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Default")
+	TSubclassOf<ARoom> SpawnRoomType;
+
+	/** Please add a variable description */
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Default")
 	TArray<float> RoomSpawnChances;
 
 	/** Please add a variable description */

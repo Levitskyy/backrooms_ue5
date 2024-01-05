@@ -41,6 +41,10 @@ public:
 	/** Wall mesh */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UInstancedStaticMeshComponent* WallStaticMesh;
+	
+	/** Column mesh **/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UInstancedStaticMeshComponent* ColumnStaticMesh;
 
 
 public:
@@ -49,6 +53,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, CallInEditor)
 	void InstantiateWallsByGraph();
+	bool IsHereCorner(TArray<bool>& graph, int32 firstRoomNumber);
 
 	virtual void OnRep_Seed() override;
 };

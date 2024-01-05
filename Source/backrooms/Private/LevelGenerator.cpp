@@ -94,8 +94,14 @@ void ALevelGenerator::PrepareSpawnRandomRoom(FVector& position, int32 id)
 		}
 	}
 
+	
 	FRotator rotation(0, 90 * randStream.RandHelper(4), 0);
 	FVector scale(1, 1, 1);
+
+	if (seed == 0) {
+		randRoomID = -1;
+		rotation = FRotator(0, 0, 0);
+	}
 
 	FTransform transform(rotation, position, scale);
 	SpawnRandomRoom(transform, randRoomID, id, seed);
@@ -103,7 +109,13 @@ void ALevelGenerator::PrepareSpawnRandomRoom(FVector& position, int32 id)
 
 void ALevelGenerator::SpawnRandomRoom(const FTransform& transform, int32 randRoomID, int32 id, int32 seed)
 {
-	ARoom* currentRoom = GetWorld()->SpawnActorDeferred<ARoom>(RoomTypes[randRoomID], transform);
+	ARoom* currentRoom;
+	if (randRoomID == -1) {
+		currentRoom = GetWorld()->SpawnActorDeferred<ARoom>(SpawnRoomType, transform);
+	}
+	else {
+		currentRoom = GetWorld()->SpawnActorDeferred<ARoom>(RoomTypes[randRoomID], transform);
+	}
 	
 	if (currentRoom) {
 		currentRoom->Init(id, seed, (OneWayChunkSize + 2) * RoomSize, this);
